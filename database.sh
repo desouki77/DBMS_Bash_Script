@@ -115,3 +115,25 @@ delete_table() {
         zenity --error --title="Error" --text="Table $tablename does not exist."
     fi
 }
+
+
+update_table() {
+    tablename=$(zenity --entry --title="Update Table" --text="Enter table name:")
+    if [ -f "$tablename" ]; then
+        pkvalue=$(zenity --entry --title="Update Table" --text="Enter primary key value to update:")
+        pkcol=$(head -1 "$tablename" | tr ',' '\n' | grep -n 'primary_key' | cut -d: -f1)
+        columns=$(head -1 "$tablename")
+        IFS=',' read -r -a colarray <<< "$columns"
+        updated_row=""
+        for col in "${colarray[@]}"; do
+            colname=$(echo $col | cut -d':' -f1)
+            value=$(zenity --entry --title="Update Table" --text="Enter new value for $colname:")
+            updated_row+="$value,"
+        done
+        updated_row=${updated_row::-1}  # Remove trailing comma
+        awk -F, -v pkcol="$pkcol" -v pkvalue="$pkvalue" -v new_row="$updated_row" 'BEGIN{OFS=","} {if($pkcol==pkvalue) print new_row; else print $0}' "$tablename" > tmp && mv tmp "$tablename"
+        zenity --info --title="Record Updated" --text="Record with primary key $pkvalue updated in $tablename."
+    else
+        zenity --error --title="Error" --text="Table $tablename does not exist."
+    fi
+}
