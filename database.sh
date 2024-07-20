@@ -64,3 +64,13 @@ list_tables() {
     fi
 }
 
+
+drop_table() {
+    tablename=$(zenity --entry --title="Drop Table" --text="Enter table name to drop:")
+    if [ -f "$tablename" ]; then
+        rm "$tablename"
+        zenity --info --title="Table Dropped" --text="Table $tablename dropped."
+    else
+        zenity --error --title="Error" --text="Table $tablename does not exist."
+    fi
+}
