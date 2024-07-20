@@ -41,3 +41,17 @@ drop_database() {
         zenity --error --title="Error" --text="Database $dbname does not exist."
     fi
 }
+
+
+create_table() {
+    tablename=$(zenity --entry --title="Create Table" --text="Enter table name:")
+    columns=$(zenity --entry --title="Create Table" --text="Enter columns (name:type, ...):")
+    pk=$(zenity --entry --title="Create Table" --text="Enter primary key column:")
+    if [ -n "$tablename" ] && [ -n "$columns" ] && [ -n "$pk" ]; then
+        echo "$columns,primary_key:$pk" > "$tablename"
+        zenity --info --title="Table Created" --text="Table $tablename created."
+    else
+        zenity --error --title="Error" --text="Incomplete table details provided."
+    fi
+}
+
