@@ -74,3 +74,22 @@ drop_table() {
         zenity --error --title="Error" --text="Table $tablename does not exist."
     fi
 }
+
+insert_table() {
+    tablename=$(zenity --entry --title="Insert into Table" --text="Enter table name:")
+    if [ -f "$tablename" ]; then
+        columns=$(head -1 "$tablename")
+        IFS=',' read -r -a colarray <<< "$columns"
+        values=""
+        for col in "${colarray[@]}"; do
+            colname=$(echo $col | cut -d':' -f1)
+            value=$(zenity --entry --title="Insert into Table" --text="Enter value for $colname:")
+            values+="$value,"
+        done
+        values=${values::-1}  # Remove trailing comma
+        echo "$values" >> "$tablename"
+        zenity --info --title="Data Inserted" --text="Data inserted into $tablename."
+    else
+        zenity --error --title="Error" --text="Table $tablename does not exist."
+    fi
+}
