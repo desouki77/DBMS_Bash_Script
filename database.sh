@@ -20,12 +20,23 @@ list_databases() {
     fi
 }
 
+
 connect_database() {
     dbname=$(zenity --entry --title="Connect to Database" --text="Enter database name to connect:")
     if [ -d "$dbname" ]; then
         cd "$dbname"
         zenity --info --title="Connected" --text="Connected to $dbname."
         database_menu
+    else
+        zenity --error --title="Error" --text="Database $dbname does not exist."
+    fi
+}
+
+drop_database() {
+    dbname=$(zenity --entry --title="Drop Database" --text="Enter database name to drop:")
+    if [ -d "$dbname" ]; then
+        rm -r "$dbname"
+        zenity --info --title="Database Dropped" --text="Database $dbname dropped."
     else
         zenity --error --title="Error" --text="Database $dbname does not exist."
     fi
