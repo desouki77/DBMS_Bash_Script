@@ -11,3 +11,11 @@ create_database() {
     fi
 }
 
+list_databases() {
+    databases=$(ls -d */)
+    if [ -n "$databases" ]; then
+        zenity --list --title="Available Databases" --column="Databases" $databases
+    else
+        zenity --info --title="No Databases" --text="No databases found."
+    fi
+}
