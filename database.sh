@@ -164,3 +164,23 @@ database_menu() {
         esac
     done
 }
+
+main_menu() {
+    while true; do
+        option=$(zenity --list --title="Main Menu" --column="Option" --column="Description" \
+            "1" "Create Database" \
+            "2" "List Databases" \
+            "3" "Connect to Database" \
+            "4" "Drop Database" \
+            "5" "Exit")
+
+        case $option in
+            1) create_database ;;
+            2) list_databases ;;
+            3) connect_database ;;
+            4) drop_database ;;
+            5) break ;;
+            *) zenity --error --title="Invalid Option" --text="Please select a valid option." ;;
+        esac
+    done
+}
