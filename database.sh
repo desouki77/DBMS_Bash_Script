@@ -93,3 +93,14 @@ insert_table() {
         zenity --error --title="Error" --text="Table $tablename does not exist."
     fi
 }
+
+
+select_table() {
+    tablename=$(zenity --entry --title="Select from Table" --text="Enter table name:")
+    if [ -f "$tablename" ]; then
+        data=$(column -t -s "," < "$tablename")
+        zenity --text-info --title="Table Data" --filename=<(echo "$data")
+    else
+        zenity --error --title="Error" --text="Table $tablename does not exist."
+    fi
+}
