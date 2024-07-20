@@ -55,3 +55,12 @@ create_table() {
     fi
 }
 
+list_tables() {
+    tables=$(ls)
+    if [ -n "$tables" ]; then
+        zenity --list --title="Available Tables" --column="Tables" $tables
+    else
+        zenity --info --title="No Tables" --text="No tables found."
+    fi
+}
+
