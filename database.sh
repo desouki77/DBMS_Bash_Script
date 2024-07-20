@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 create_database() {
     dbname=$(zenity --entry --title="Create Database" --text="Enter database name:")
     if [ -n "$dbname" ]; then
@@ -100,6 +99,18 @@ select_table() {
     if [ -f "$tablename" ]; then
         data=$(column -t -s "," < "$tablename")
         zenity --text-info --title="Table Data" --filename=<(echo "$data")
+    else
+        zenity --error --title="Error" --text="Table $tablename does not exist."
+    fi
+}
+
+delete_table() {
+    tablename=$(zenity --entry --title="Delete from Table" --text="Enter table name:")
+    if [ -f "$tablename" ]; then
+        pkvalue=$(zenity --entry --title="Delete from Table" --text="Enter primary key value to delete:")
+        pkcol=$(head -1 "$tablename" | tr ',' '\n' | grep -n 'primary_key' | cut -d: -f1)
+        awk -F, -v pkcol="$pkcol" -v pkvalue="$pkvalue" 'NR==1 || $pkcol != pkvalue' "$tablename" > tmp && mv tmp "$tablename"
+        zenity --info --title="Record Deleted" --text="Record with primary key $pkvalue deleted from $tablename."
     else
         zenity --error --title="Error" --text="Table $tablename does not exist."
     fi
