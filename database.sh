@@ -137,3 +137,30 @@ update_table() {
         zenity --error --title="Error" --text="Table $tablename does not exist."
     fi
 }
+
+
+database_menu() {
+    while true; do
+        db_option=$(zenity --list --title="Database Menu" --column="Option" --column="Description" \
+            "1" "Create Table" \
+            "2" "List Tables" \
+            "3" "Drop Table" \
+            "4" "Insert into Table" \
+            "5" "Select from Table" \
+            "6" "Delete from Table" \
+            "7" "Update Table" \
+            "8" "Exit")
+
+        case $db_option in
+            1) create_table ;;
+            2) list_tables ;;
+            3) drop_table ;;
+            4) insert_table ;;
+            5) select_table ;;
+            6) delete_table ;;
+            7) update_table ;;
+            8) cd ..; break ;;
+            *) zenity --error --title="Invalid Option" --text="Please select a valid option." ;;
+        esac
+    done
+}
